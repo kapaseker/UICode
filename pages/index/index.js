@@ -7,17 +7,23 @@ Page({
     motto: 'Hello World',
     userInfo: {},
     sampleInfo: [
-      { title: "", navito: '' },
+      { title: "use view", navito: '../samples/view/view' },
+      { title: "Scroll View", navito: "../samples/view/view" },
     ],
   },
   //事件处理函数
   bindViewTap: function () {
-    wx.navigateTo({
-      url: '../logs/logs'
-    })
+    var that = this;
+    wx.showModal({
+      title: "Your nick name",
+      content: that.data.userInfo.nickName,
+      showCancel: false,
+    });
   },
-  naviTo: function () {
-    console.log("Click me");
+  naviTo: function (view) {
+    wx.navigateTo({
+      url: view.target.dataset.url,
+    });
   },
   seeLog: function () {
     wx.navigateTo({

@@ -1,4 +1,16 @@
 /**index.wxss**/
+.logwrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.logbtn {
+  margin-right: 0px;
+}
+
 .userinfo {
   display: flex;
   flex-direction: column;
@@ -6,6 +18,7 @@
 }
 
 .headInfoWrapper {
+  margin-top: 100rpx;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -23,12 +36,18 @@
 }
 
 .usermotto {
-  
+  margin-left: 26rpx;
 }
 
 .samplelist{
-  background-color: #2980b9;
   border-radius: 10rpx;
   margin-top: 20rpx;
   margin-bottom: 20rpx;
+  display: flex;
+  flex-direction: column;
+}
+
+.samplebtn {
+  width:100%;
+  margin-bottom: 10rpx;
 }

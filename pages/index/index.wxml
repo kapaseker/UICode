@@ -1,4 +1,7 @@
 <!--index.wxml-->
+<view class="logwrapper">
+  <button class="logbtn" size="default" bindtap="seeLog">Log</button>
+</view>
 <view class="container">
   <view class="headInfoWrapper">
     <view bindtap="bindViewTap" class="userinfo">
@@ -9,12 +12,7 @@
       <text class="user-motto">{{motto}}</text>
     </view>
   </view>
-  <view class="samplelist">
-    <view wx-for="sampleInfo">
-      <button bindtap="naviTo" data-url="{{item.navito}}">{{item.tilte}}</button>
-    </view>
-  </view>
-  <view>
-    <button size="default" bindtap="seeLog"> see Log </button>
-  </view>
+</view>
+<view class="samplelist">
+  <button wx:for="{{sampleInfo}}" class="samplebtn" size="" bindtap="naviTo" data-url="{{item.navito}}">{{item.title}}</button>
 </view>
