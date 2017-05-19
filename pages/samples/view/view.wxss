@@ -1,0 +1,14 @@
+.divitem {
+    width: 100rpx;
+    height: 100rpx;
+}
+
+.row-wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.column-wrapper {
+    display: flex;
+    flex-direction: column;
+}

@@ -1,8 +1,8 @@
-<view>
+<view class="row-wrapper">
     <view class="divitem"></view>
     <view class="divitem"></view>
 </view>
-<view>
+<view class="column-wrapper">
     <view class="divitem"></view>
     <view class="divitem"></view>
 </view>
