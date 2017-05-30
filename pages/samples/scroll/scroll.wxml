@@ -1,0 +1,21 @@
+<view>
+    <!--此处特别特别坑，普通的横线横向滑动必须配合父css，white-space:nw-wrap，子属性为：display:inline-block -->
+    <scroll-view scroll-top="{{curTop}}" scroll-x class="x-scroll" scroll-with-animation>
+         <view class="limeitem horizontalitem" id="{{items[0]}}">lime</view>
+        <view class="tealitem horizontalitem" id="{{items[1]}}">teal</view>
+        <view class="violetitem horizontalitem" id="{{items[2]}}">violet</view>
+        <view class="crimesonitem horizontalitem" id="{{items[3]}}">crimeson</view>
+    </scroll-view>
+</view>
+
+<view class="column-wrapper">
+    <view>y-scroll</view>
+    <scroll-view scroll-top="{{curTop}}" scroll-x class="y-scroll" scroll-with-animation scroll-into-view="{{curItem}}">
+        <view class="limeitem" id="{{items[0]}}">lime</view>
+        <view class="tealitem" id="{{items[1]}}">teal</view>
+        <view class="violetitem" id="{{items[2]}}">violet</view>
+        <view class="crimesonitem" id="{{items[3]}}">crimeson</view>
+    </scroll-view>
+    <button bindtap="scrollTo">ScrollTo</button>
+    <button bindtap="scrollMove">ScrollMove</button>
+</view>

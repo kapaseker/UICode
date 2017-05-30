@@ -8,7 +8,7 @@ Page({
     userInfo: {},
     sampleInfo: [
       { title: "use view", navito: '../samples/view/view' },
-      { title: "Scroll View", navito: "../samples/view/view" },
+      { title: "Scroll View", navito: "../samples/scroll/scroll" },
     ],
   },
   //事件处理函数

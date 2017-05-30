@@ -2,7 +2,8 @@
   "pages":[
     "pages/index/index",
     "pages/logger/logger",
-    "pages/samples/view/view"
+    "pages/samples/view/view",
+    "pages/samples/scroll/scroll"
   ],
   "window":{
     "backgroundTextStyle":"light",

@@ -1,8 +1,14 @@
+<view>
+    Using row direction
+</view>
 <view class="row-wrapper">
-    <view class="divitem"></view>
-    <view class="divitem"></view>
+    <view class="commenitem"></view>
+    <view class="commenitem"></view>
+</view>
+<view>
+    Using column direction
 </view>
 <view class="column-wrapper">
-    <view class="divitem"></view>
-    <view class="divitem"></view>
+    <view class="commenitem"></view>
+    <view class="commenitem"></view>
 </view>

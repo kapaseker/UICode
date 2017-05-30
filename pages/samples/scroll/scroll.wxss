@@ -1,0 +1,17 @@
+.y-scroll{
+    height: 260rpx;
+}
+
+.horizontalitem{
+    display: inline-block;
+}
+
+.x-scroll {
+    white-space: nowrap;
+}
+
+.wholeitem{
+    width:100%;
+    background-color: blue;
+    border: 6rpx solid yellow;
+}

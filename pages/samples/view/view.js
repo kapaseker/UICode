@@ -1,5 +1,7 @@
-var logger = require("../../log/log.js");
+var logger = require("../../../log/log.js");
 
 Page({
-    
+    data:{
+
+    }
 });
