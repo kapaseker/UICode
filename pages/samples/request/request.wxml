@@ -1,0 +1,8 @@
+<view class="column-wrapper">
+    <text>request:http://61.189.20.114:9001/AbilityPlatform?key=7A2EA1FD3CBC3D46D037ABA35F62A7A3-001&sn=20170531154840&type=bus_route&function=get_bus_by_lineid&lineId=210100010276,210100010275,210100010013,210100010014</text>
+    <text>Result:</text>
+    <text wx:for="{{result}}">
+        {{item}}
+    </text>
+    <button bindtap="sendRequest">FetchRequest</button>
+</view>
