@@ -6,7 +6,9 @@
     "pages/samples/scroll/scroll",
     "pages/samples/swipe/swiper",
     "pages/samples/movable/movable",
-    "pages/samples/baseview/base"
+    "pages/samples/baseview/base",
+    "pages/samples/request/request",
+    "pages/samples/loc/location"
   ],
   "window":{
     "backgroundTextStyle":"light",

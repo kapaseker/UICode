@@ -1,0 +1,4 @@
+<view>
+    <text>check you postion</text>
+    <button wx:if="{{show}}" bindtap="fetchLocation">Fetch Location</button>
+</view>
