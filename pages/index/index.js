@@ -9,6 +9,7 @@ Page({
     sampleInfo: [
       { title: "use view", navito: '../samples/view/view' },
       { title: "Scroll View", navito: "../samples/scroll/scroll" },
+      { title: "Swiper", navito: "../samples/swipe/swiper" },
     ],
   },
   //事件处理函数
