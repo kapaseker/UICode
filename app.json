@@ -4,7 +4,9 @@
     "pages/logger/logger",
     "pages/samples/view/view",
     "pages/samples/scroll/scroll",
-    "pages/samples/swipe/swiper"
+    "pages/samples/swipe/swiper",
+    "pages/samples/movable/movable",
+    "pages/samples/baseview/base"
   ],
   "window":{
     "backgroundTextStyle":"light",

@@ -10,6 +10,8 @@ Page({
       { title: "use view", navito: '../samples/view/view' },
       { title: "Scroll View", navito: "../samples/scroll/scroll" },
       { title: "Swiper", navito: "../samples/swipe/swiper" },
+      { title: "Movable View", navito: "../samples/movable/movable" },
+      { title: "Base View", navito: "../samples/baseview/base" },
     ],
   },
   //事件处理函数

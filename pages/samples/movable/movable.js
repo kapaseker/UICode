@@ -1,0 +1,12 @@
+Page({
+    data:{
+        x:0,
+        y:0,
+    },
+    moveTo:function(){
+        this.setData({
+            x:30,
+            y:30,
+        })
+    }
+});

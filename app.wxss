@@ -8,6 +8,12 @@
   box-sizing: border-box;
 } 
 
+.content-wrapper {
+    border: 2rpx dotted #1565C0;
+    border-radius: 10rpx;
+    margin-bottom: 10rpx;
+}
+
 .row-wrapper {
     padding: 20rpx;
     display: flex;
