@@ -1,0 +1,4 @@
+<view class="mapwrapper container">
+    <map class="mapview" circles="{{circles}}" bindcontroltap="tapControl" controls="{{ctrls}}" polyline="{{pls}}" markers="{{mks}}" scale="14" longitude="{{centLon}}" latitude="{{centLat}}">
+    </map>
+</view>

@@ -14,6 +14,7 @@ Page({
       { title: "Base View", navito: "../samples/baseview/base" },
       { title: "Request", navito: "../samples/request/request" },
       { title: "Location", navito: "../samples/loc/location" },
+      { title: "Using Map", navito: "../samples/map/map" },
     ],
   },
   //事件处理函数

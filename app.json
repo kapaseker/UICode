@@ -8,7 +8,8 @@
     "pages/samples/movable/movable",
     "pages/samples/baseview/base",
     "pages/samples/request/request",
-    "pages/samples/loc/location"
+    "pages/samples/loc/location",
+    "pages/samples/map/map"
   ],
   "window":{
     "backgroundTextStyle":"light",
