@@ -1,4 +1,4 @@
 <view bindtouchstart="onToucStart" bindtouchmove="onMove" class="wrapper">
-    <image src="/res/img/jingyuetan.jpg" class="bkg" style="top:{{topOffset}}px;left:{{leftOffset}}px;width:{{picwidth}}px;height:{{picheight}}px;"></image>
+    <image src="/res/img/jingyuetan.jpg" class="bkg" style="transform:scale({{xRatio}},{{yRatio}});top:{{topOffset}}px;left:{{leftOffset}}px;width:{{picwidth}}px;height:{{picheight}}px;"></image>
     <canvas class="layer" style="top:{{topOffset}}px;left:{{leftOffset}}px;width:{{picwidth}}px;height:{{picheight}}px;"></canvas>
 </view>
