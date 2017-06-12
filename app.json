@@ -9,7 +9,8 @@
     "pages/samples/baseview/base",
     "pages/samples/request/request",
     "pages/samples/loc/location",
-    "pages/samples/map/map"
+    "pages/samples/map/map",
+    "pages/samples/scenicview/scenicview"
   ],
   "window":{
     "backgroundTextStyle":"light",
