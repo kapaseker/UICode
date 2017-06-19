@@ -53,14 +53,26 @@ Page({
         maxXOffset: 0,
         // max Y offset
         maxYOffset: 0,
-        // move trigger count
-        moveMaxTrigger: 6,
         // current move index
         moveIndex: 0,
         // tranfrom x pos
         xPos: 0,
         // transfor y pos
         yPos: 0,
+        // canvas context
+        canvasContext: null,
+        // the dot lines postion in canvas
+        lines: [[10, 20], [10, 40], [200, 200], [400, 345]],
+    },
+
+    onLoad: function () {
+        var canvas = wx.createCanvasContext("mapLayer");
+
+        this.setData({
+            canvasContext: canvas
+        });
+
+        this.drawLines();
     },
 
     onReady: function () {
@@ -92,7 +104,7 @@ Page({
     onToucStart: function (evt) {
         if (evt.touches.length == 1) {
             this.setData({
-                evtMode: "move",
+                evtMode: "pinch",
             })
             this.setLastMovePos(evt);
         } else if (evt.touches.length == 2) {
@@ -128,8 +140,21 @@ Page({
             var setX = curX - lastX + this.data.xPos;
             var setY = curY - lastY + this.data.yPos;
 
-            // setX = setX > 0 ? 0 : (setX < -this.data.maxXOffset ? -this.data.maxXOffset : setX);
-            // setY = setY > 0 ? 0 : (setY < -this.data.maxYOffset ? -this.data.maxYOffset : setY);
+            var allLeftOffSet = setX + this.data.leftOffset;
+
+            if (allLeftOffSet < -this.data.maxXOffset) {
+                setX = -this.data.maxXOffset - this.data.leftOffset;
+            } else if (allLeftOffSet > 0) {
+                setX = 0 - this.data.leftOffset;
+            }
+
+            var allTopOffset = setY + this.data.topOffset;
+
+            if (allTopOffset < -this.data.maxYOffset) {
+                setY = -this.data.maxYOffset - this.data.topOffset
+            } else if (allTopOffset > 0) {
+                setY = 0 - this.data.topOffset;
+            }
 
             this.moveMapPosition(setX, setY);
             this.setLastMovePos(evt);
@@ -139,6 +164,11 @@ Page({
             var pinPos = this.getLastPinchPos();
             var lastDis = pinPos.distance;
             var cent = pinPos.center;
+
+            evt.touches[1] = {
+                clientX: 0,
+                clientY: 0
+            }
 
             this.setLastPinchPos(evt.touches[0], evt.touches[1]);
 
@@ -250,6 +280,9 @@ Page({
         var xOffset = this.data.xPos + this.data.leftOffset;
         var yOffset = this.data.yPos + this.data.topOffset;
 
+        xOffset = xOffset > 0 ? 0 : (xOffset < -this.data.maxXOffset ? -this.data.maxXOffset : xOffset);
+        yOffset = yOffset > 0 ? 0 : (yOffset < -this.data.maxYOffset ? -this.data.maxYOffset : yOffset);
+
         this.setData({
             leftOffset: xOffset,
             topOffset: yOffset,
@@ -282,8 +315,8 @@ Page({
         var maxXOffset = width - this.data.wrapperWidth;
         var maxYOffset = height - this.data.wrapperHeight;
 
-        setX = setX > 0 ? 0 : (setX < -this.data.maxXOffset ? -this.data.maxXOffset : setX);
-        setY = setY > 0 ? 0 : (setY < -this.data.maxYOffset ? -this.data.maxYOffset : setY);
+        setX = setX > 0 ? 0 : (setX < -maxXOffset ? -maxXOffset : setX);
+        setY = setY > 0 ? 0 : (setY < -maxYOffset ? -maxYOffset : setY);
 
         this.setData({
             leftOffset: setX,
@@ -291,9 +324,16 @@ Page({
             picWidth: width,
             picHeight: height,
             currentRatio: 1,
-            maxXOffset: width - this.data.wrapperWidth,
-            maxYOffset: height - this.data.wrapperHeight
+            maxXOffset: maxXOffset,
+            maxYOffset: maxYOffset
         });
+
+        var canvas = this.data.canvasContext;
+        canvas.clearRect(0, 0, this.data.originWidth, this.data.originHeight);
+        canvas.save();
+        canvas.scale(this.data.scaleRatio, this.data.scaleRatio);
+        this.drawLines();
+        canvas.restore();
     },
 
     scaleMapRatio: function (ratio, cent, isShrink) {
@@ -328,4 +368,25 @@ Page({
         //     scaleRatio: realRatio,
         // });
     },
+
+    drawLines: function () {
+
+        var canvas = this.data.canvasContext;
+
+        canvas.save();
+        canvas.setFillStyle("red");
+        canvas.setStrokeStyle("blue");
+        canvas.setLineWidth(4);
+
+        canvas.moveTo(10, 20);
+
+        for (var item in this.data.lines) {
+            var lineDot = this.data.lines[item];
+            canvas.lineTo(lineDot[0], lineDot[1]);
+        }
+
+        canvas.stroke();
+        canvas.draw();
+        canvas.restore();
+    }
 });

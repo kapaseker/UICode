@@ -15,7 +15,8 @@ Page({
       { title: "Request", navito: "../samples/request/request" },
       { title: "Location", navito: "../samples/loc/location" },
       { title: "Using Map", navito: "../samples/map/map" },
-      { title: "Scenic View", navito: "../samples/scenicview/scenicview" }
+      { title: "Scenic View", navito: "../samples/scenicview/scenicview" },
+      { title: "Using Canvas", navito: "../samples/canvas/usecan" }
     ],
   },
   //事件处理函数

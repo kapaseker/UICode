@@ -1,0 +1,4 @@
+<view class="wrapper">
+    <canvas class="canvas" canvas-id="mapLayer" style="width:3000px;height:3000px">
+    </canvas>
+</view>

@@ -10,7 +10,8 @@
     "pages/samples/request/request",
     "pages/samples/loc/location",
     "pages/samples/map/map",
-    "pages/samples/scenicview/scenicview"
+    "pages/samples/scenicview/scenicview",
+    "pages/samples/canvas/usecan"
   ],
   "window":{
     "backgroundTextStyle":"light",
