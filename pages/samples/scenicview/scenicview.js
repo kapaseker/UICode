@@ -3,25 +3,64 @@ var Calc = require("../../../util/calc.js");
 // touch mode include "move","pinch"
 Page({
     data: {
-        picwidth: 0,
-        picheight: 0,
-        picLength: 0,
+        // the origin width of picture
+        originWidth: 0,
+        // the origin height of picture
+        originHeight: 0,
+        // the  diagonal of the picture
+        originPicLength: 0,
+        // the real picture width
+        picWidth: 0,
+        // the real picture height
+        picHeight: 0,
+        // the picture postion of y-axis in wrapper
         topOffset: 0,
+        // the picture postion of x-axis in wrapper
         leftOffset: 0,
-        evtMode: "move",
+        // the wrapper width
+        wrapperWidth: 0,
+        // the wrapper height
+        wrapperHeight: 0,
+        // the move-mode
+        evtMode: "unset",
+        // the last postion of move-event 
         moveEvent: {
             lastX: 0,
             lastY: 0,
         },
+        // the pinch event data
         pinchEvent: {
             distance: 0,
+            hasCenter: false,
             center: {
                 x: 0,
                 y: 0
             }
         },
-        xRatio: 1,
-        yRatio: 1,
+        // the real scale ratio of the picture
+        scaleRatio: 1,
+        // the current scale ratio of the picture
+        currentRatio: 1,
+        // current transform x position
+        transformX: 0,
+        // current transform y position
+        transformY: 0,
+        // the pic origin min ratio
+        minRatio: 0,
+        // the pic origin max ratio
+        maxRatio: 0,
+        // max X offset
+        maxXOffset: 0,
+        // max Y offset
+        maxYOffset: 0,
+        // move trigger count
+        moveMaxTrigger: 6,
+        // current move index
+        moveIndex: 0,
+        // tranfrom x pos
+        xPos: 0,
+        // transfor y pos
+        yPos: 0,
     },
 
     onReady: function () {
@@ -29,10 +68,24 @@ Page({
         var width = 3024;
         var height = 2268;
 
+        var systemInfo = wx.getSystemInfoSync();
+
+        var outerWidth = systemInfo.screenWidth - 8;
+        var outerHeight = 400;
+        var min = Math.max(outerWidth / width, outerHeight / height);
+
         this.setData({
-            picwidth: width,
-            picheight: height,
-            picLength: Calc.distanceInTowPoints(0, 3024, 0, 2268),
+            picWidth: width,
+            picHeight: height,
+            originWidth: width,
+            originHeight: height,
+            originPicLength: Calc.distanceInTowPoints(0, 3024, 0, 2268),
+            wrapperWidth: outerWidth,
+            wrapperHeight: outerHeight,
+            maxRatio: 1,
+            minRatio: min,
+            maxXOffset: width - outerWidth,
+            maxYOffset: height - outerHeight,
         });
     },
 
@@ -51,26 +104,47 @@ Page({
     },
 
     onMove: function (evt) {
+
+        console.log("MOVE");
+
+        // var evtIndex = this.data.moveIndex;
+        // ++evtIndex;
+        // this.setData({
+        //     moveIndex: evtIndex,
+        // });
+
+        // if (evtIndex < this.data.moveMaxTrigger) {
+        //     return;
+        // }
+
         if (this.data.evtMode == "move") {
+
             var curX = evt.touches[0].clientX;
             var curY = evt.touches[0].clientY;
             var lastPos = this.getLastMovePos();
             var lastX = lastPos.x;
             var lastY = lastPos.y;
 
-            var setX = curX - lastX + this.data.leftOffset;
-            var setY = curY - lastY + this.data.topOffset;
+            var setX = curX - lastX + this.data.xPos;
+            var setY = curY - lastY + this.data.yPos;
 
-            setX = setX > 0 ? 0 : (setX < -this.data.picwidth ? -this.data.picwidth : setX);
-            setY = setY > 0 ? 0 : (setY < -this.data.picheight ? -this.data.picheight : setY);
+            // setX = setX > 0 ? 0 : (setX < -this.data.maxXOffset ? -this.data.maxXOffset : setX);
+            // setY = setY > 0 ? 0 : (setY < -this.data.maxYOffset ? -this.data.maxYOffset : setY);
 
-            this.setPositionOffset(setX, setY);
+            this.moveMapPosition(setX, setY);
             this.setLastMovePos(evt);
+
         } else if (this.data.evtMode == "pinch") {
 
             var pinPos = this.getLastPinchPos();
             var lastDis = pinPos.distance;
             var cent = pinPos.center;
+
+            this.setLastPinchPos(evt.touches[0], evt.touches[1]);
+
+            if (!pinPos.hasCenter) {
+                return;
+            }
 
             var x0 = evt.touches[0].clientX;
             var x1 = evt.touches[1].clientX;
@@ -81,22 +155,27 @@ Page({
             var curDis = Calc.distanceInTowPoints(x0, x1, y0, y1);
 
             var diffDis = Math.abs(curDis - lastDis);
-            var diffRatio = diffDis / this.data.picLength;
+            var diffRatio = diffDis / this.data.originPicLength;
 
             if (curDis < lastDis) { // shrink
-                this.setRatio(diffRatio, true);
+                this.scaleMapRatio(diffRatio, cent, true);
             } else if (curDis > lastDis) { // expand
-                this.setRatio(diffRatio, false);
+                this.scaleMapRatio(diffRatio, cent, false);
             }
-
-            this.setLastPinchPos(evt.touches[0], evt.touches[1]);
         }
     },
 
     onTouchEnd: function (evt) {
 
+        if (this.data.evtMode == "pinch") {
+            this.updateMapPosAndSize();
+        } else if (this.data.evtMode == "move") {
+            this.updateMapPosition();
+        }
+
         this.setData({
-            evtMode: "unset"
+            evtMode: "unset",
+            moveIndex: 0
         });
 
         this.setLastPinchPos(null);
@@ -125,6 +204,7 @@ Page({
             this.setData({
                 pinchEvent: {
                     distance: 0,
+                    hasCenter: false,
                     center: {
                         x: 0,
                         y: 0,
@@ -145,12 +225,16 @@ Page({
 
         var cent = this.data.pinchEvent.center;
 
-        if (this.data.pinchEvent.center == null) {
+        var hasCenter = this.data.pinchEvent.hasCenter;
+
+        if (!hasCenter) {
             cent = Calc.centPointInTowPoints(x0, x1, y0, y1);
+            hasCenter = true;
         };
 
         this.setData({
             pinchEvent: {
+                hasCenter: hasCenter,
                 distance: dis,
                 center: cent
             }
@@ -161,21 +245,87 @@ Page({
         return this.data.pinchEvent;
     },
 
-    setPositionOffset: function (x, y) {
+    updateMapPosition: function () {
+
+        var xOffset = this.data.xPos + this.data.leftOffset;
+        var yOffset = this.data.yPos + this.data.topOffset;
+
         this.setData({
-            leftOffset: x,
-            topOffset: y,
+            leftOffset: xOffset,
+            topOffset: yOffset,
+            xPos: 0,
+            yPos: 0
         });
     },
 
-    setRatio: function (ratio, isShrink) {
-        ratio = ratio * 10;
+    moveMapPosition: function (x, y) {
+        this.setData({
+            xPos: x,
+            yPos: y
+        });
+    },
 
-        var realRation = isShrink ? (this.data.xRatio - ratio) : (this.data.xRatio + ratio);
+    updateMapPosAndSize: function () {
+
+        var width = this.data.scaleRatio * this.data.originWidth;
+        var height = this.data.scaleRatio * this.data.originHeight;
+
+        var pinPos = this.getLastPinchPos();
+        var pinX = pinPos.center.x;
+        var pinY = pinPos.center.y;
+
+        var offsetScaleRatio = width / this.data.picWidth;
+
+        var setX = this.data.leftOffset + (pinX - this.data.leftOffset) * (1 - offsetScaleRatio);
+        var setY = this.data.topOffset + (pinY - this.data.topOffset) * (1 - offsetScaleRatio);
+
+        var maxXOffset = width - this.data.wrapperWidth;
+        var maxYOffset = height - this.data.wrapperHeight;
+
+        setX = setX > 0 ? 0 : (setX < -this.data.maxXOffset ? -this.data.maxXOffset : setX);
+        setY = setY > 0 ? 0 : (setY < -this.data.maxYOffset ? -this.data.maxYOffset : setY);
 
         this.setData({
-            xRatio: realRation,
-            yRatio: realRation,
+            leftOffset: setX,
+            topOffset: setY,
+            picWidth: width,
+            picHeight: height,
+            currentRatio: 1,
+            maxXOffset: width - this.data.wrapperWidth,
+            maxYOffset: height - this.data.wrapperHeight
         });
+    },
+
+    scaleMapRatio: function (ratio, cent, isShrink) {
+        ratio = ratio * 4;
+
+        var realRatio = isShrink ? (this.data.scaleRatio - ratio) : (this.data.scaleRatio + ratio);
+
+        if (realRatio > this.data.maxRatio) {
+            realRatio = this.data.maxRatio;
+        } else if (realRatio < this.data.minRatio) {
+            realRatio = this.data.minRatio;
+        }
+
+        var picCentX = cent.x - this.data.leftOffset;
+        var picCentY = cent.y - this.data.topOffset;
+
+        var currentPicScaleRatio = this.data.originWidth * realRatio / this.data.picWidth;
+
+        this.setData({
+            transformX: picCentX,
+            transformY: picCentY,
+            currentRatio: currentPicScaleRatio,
+            scaleRatio: realRatio,
+        });
+
+        // var width = this.data.originWidth * realRatio;
+        // var height = this.data.originHeight * realRatio;
+
+        // this.setData({
+        //     picWidth: width,
+        //     picHeight: height,
+        //     scaleRatio: realRatio,
+        // });
     },
 });

@@ -1,4 +1,5 @@
-<view bindtouchstart="onToucStart" bindtouchmove="onMove" class="wrapper">
-    <image src="/res/img/jingyuetan.jpg" class="bkg" style="transform:scale({{xRatio}},{{yRatio}});top:{{topOffset}}px;left:{{leftOffset}}px;width:{{picwidth}}px;height:{{picheight}}px;"></image>
-    <canvas class="layer" style="top:{{topOffset}}px;left:{{leftOffset}}px;width:{{picwidth}}px;height:{{picheight}}px;"></canvas>
+<view style="width:{{wrapperWidth}}px;height:{{wrapperHeight}}px;" bindtouchstart="onToucStart" bindtouchend="onTouchEnd"
+    bindtouchmove="onMove" class="wrapper">
+    <image src="/res/img/jingyuetan.jpg" class="bkg" style="transform-origin:{{transformX}}px {{transformY}}px;transform:translate({{xPos}}px,{{yPos}}px) scale({{currentRatio}},{{currentRatio}});top:{{topOffset}}px;left:{{leftOffset}}px;width:{{picWidth}}px;height:{{picHeight}}px;"></image>
+    <canvas class="layer" style="top:{{topOffset}}px;left:{{leftOffset}}px;width:{{picWidth}}px;height:{{picHeight}}px;"></canvas>
 </view>

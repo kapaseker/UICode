@@ -1,9 +1,9 @@
 var Calc = {
-    distanceInTowPoints(x0, x1, y0, y1) {
+    distanceInTowPoints: function (x0, x1, y0, y1) {
         var dis = (Math.sqrt(((x1 - x0) * (x1 - x0)) + ((y1 - y0) * (y1 - y0))));
         return Math.round(dis * 100) / 100;
     },
-    centPointInTowPoints(x0, x1, y0, y1) {
+    centPointInTowPoints: function (x0, x1, y0, y1) {
         return {
             x: ((x0 + x1) / 2),
             y: ((y0 + y1) / 2)
